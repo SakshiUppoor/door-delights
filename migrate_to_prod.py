@@ -35,6 +35,8 @@ with open("releases.json") as json_file:
 
 if release_id != -1:
     migrations = releases[release_id]["migrations"]
+    if rollback:
+        migrations = migrations[::-1]
 
 else:
     print("No migrations found.")
@@ -51,13 +53,13 @@ for migration in migrations:
             # TODO Get appropriate permissions
 
             cursor.execute(query)
-            log_success(release_no, migration)
+            log_success(release_no, migration, rollback)
 
             # TODO Revoke access permissions
 
         except (Exception, psycopg2.Error) as error:
             failed_flag = 1
-            log_error(release_no, migration, error)
+            log_error(release_no, migration, error, rollback)
 
             break
 

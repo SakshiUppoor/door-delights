@@ -82,15 +82,16 @@ Returns:
 """
 
 
-def log_success(release_no, migration_file_name):
-    write_to_log_file(
-        "db.log",
-        f"Release-{release_no} Succesfully applied migration {migration_file_name}",
-    )
-    write_to_log_file(
-        "message.log",
-        f"Release-{release_no} Succesfully applied migration {migration_file_name}",
-    )
+def log_success(release_no, migration_file_name, rollback):
+    if rollback:
+        message = f"Release-{release_no} Succesfully rolled back migration {migration_file_name}"
+    else:
+        message = (
+            f"Release-{release_no} Succesfully applied migration {migration_file_name}"
+        )
+    write_to_log_file("db.log", message)
+    write_to_log_file("message.log", message)
+
 
 """
 If a migration fails, the error is logged in 
@@ -107,19 +108,22 @@ Arguments:
 Returns:
 -
 """
-def log_error(release_no, migration_file_name, error):
-    print(
-        f"Release-{release_no} Failed to run apply migration {migration_file_name}. Check error.log for details."
-    )
 
-    write_to_log_file(
-        "message.log",
-        f"Release-{release_no} Failed to run apply migration {migration_file_name}. Check error.log for details.",
-    )
-    write_to_log_file(
-        "error.log",
-        f"Error while applying migration: {error}".replace("\n", ""),
-    )
+
+def log_error(release_no, migration_file_name, error, rollback):
+    if rollback:
+        message = f"Release-{release_no} Failed to roll back migration {migration_file_name}. Check error.log for details."
+        error_message = (
+            f"Error while rolling back migration: {error}".replace("\n", ""),
+        )
+    else:
+        message = f"Release-{release_no} Failed to apply migration {migration_file_name}. Check error.log for details."
+        error_message = (f"Error while applying migration: {error}".replace("\n", ""),)
+
+    print(message)
+
+    write_to_log_file("message.log", message)
+    write_to_log_file("error.log", error_message)
 
 
 """
