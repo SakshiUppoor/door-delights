@@ -117,4 +117,4 @@ file_name = create_migration_files(migration_name, sql_script, rollback_script)
 
 include_in_releases_json(file_name)
 
-print("Successfully added migration files")
+print(f"Successfully added migration files ({file_name})")

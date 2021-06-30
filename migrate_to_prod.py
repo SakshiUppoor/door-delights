@@ -51,7 +51,10 @@ for migration in migrations:
         try:
 
             # TODO Get appropriate permissions
-
+            if rollback:
+                print(f"Rolling back {migration}.........", end="")
+            else:
+                print(f"Applying {migration}.........", end="")
             cursor.execute(query)
             log_success(release_no, migration, rollback)
 
@@ -74,4 +77,7 @@ if connection:
     connection.close()
 
 if migrations and not failed_flag:
-    print("Migrations applied succesfully. ")
+    if rollback:
+        print("Rolled back successfully. ")
+    else:
+        print("Migrations applied succesfully. ")

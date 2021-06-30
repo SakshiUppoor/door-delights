@@ -84,8 +84,10 @@ Returns:
 
 def log_success(release_no, migration_file_name, rollback):
     if rollback:
+        print("Rolled back.")
         message = f"Release-{release_no} Succesfully rolled back migration {migration_file_name}"
     else:
+        print("Applied.")
         message = (
             f"Release-{release_no} Succesfully applied migration {migration_file_name}"
         )
@@ -111,6 +113,7 @@ Returns:
 
 
 def log_error(release_no, migration_file_name, error, rollback):
+    print("Failed.")
     if rollback:
         message = f"Release-{release_no} Failed to roll back migration {migration_file_name}. Check error.log for details."
         error_message = (
