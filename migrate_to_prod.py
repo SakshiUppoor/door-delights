@@ -65,8 +65,11 @@ for migration in migrations:
             log_error(release_no, migration, error, rollback)
 
             break
-
-    releases[release_id]["released"] = True
+    
+    if rollback:
+        releases[release_id]["released"] = False
+    else:
+        releases[release_id]["released"] = True
     data = {"releases": releases}
 
     with open("releases.json", "w") as file:
