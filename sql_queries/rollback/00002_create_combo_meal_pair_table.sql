@@ -1,0 +1,4 @@
+BEGIN TRANSACTION;
+	DROP TABLE combo_meal_pair;
+COMMIT;
+

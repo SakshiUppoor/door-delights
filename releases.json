@@ -6,7 +6,8 @@
             "date_released": null,
             "migrations": [
                 "00000_create_user_and_address_tables.sql",
-                "00001_create_menu_items_tables.sql"
+                "00001_create_menu_items_tables.sql",
+                "00002_create_combo_meal_pair_table.sql"
             ]
         }
     ]
