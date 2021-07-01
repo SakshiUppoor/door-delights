@@ -1,4 +1,12 @@
 {
     "releases": [
+        {
+            "number": "0.0.0",
+            "released": false,
+            "date_released": null,
+            "migrations": [
+                "00000_create_user_and_address_tables.sql"
+            ]
+        }
     ]
 }
