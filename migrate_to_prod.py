@@ -1,11 +1,16 @@
 import json
 import psycopg2
+from datetime import datetime
+import os
+from dotenv import load_dotenv
 from utils import (
     parse_args,
     log_success,
     log_error,
     create_server_connection,
 )
+
+load_dotenv()
 
 # Get release_no and whether the rollback feature is called
 release_no, rollback = parse_args()
@@ -66,10 +71,20 @@ for migration in migrations:
 
             break
     
+    db_server = os.getenv("DATABASE_SERVER").lower()
     if rollback:
-        releases[release_id]["released"] = False
+        if db_server == "qa":
+            releases[release_id]["releasedOnQA"] = False
+        elif db_server == "prod":
+            releases[release_id]["releasedOnProd"] = False
     else:
-        releases[release_id]["released"] = True
+        now = datetime.now()
+        if db_server == "qa":
+            releases[release_id]["releasedOnQA"] = True
+            releases[release_id]["dateReleasedOnQA"] = now.isoformat()
+        elif db_server == "prod":
+            releases[release_id]["releasedOnProd"] = True
+            releases[release_id]["dateReleasedOnProd"] = now.isoformat()
     data = {"releases": releases}
 
     with open("releases.json", "w") as file:

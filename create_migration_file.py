@@ -85,7 +85,7 @@ def include_in_releases_json(file_name):
         releases = json.load(json_file).get("releases")
 
         for i in range(len(releases)):
-            if not releases[i]["released"]:
+            if not releases[i]["releasedOnQA"] and not releases[i]["releasedOnProd"]:
                 latest_release = releases[i]["number"]
                 releases[i]["migrations"].append(file_name)
                 break
@@ -103,8 +103,10 @@ def include_in_releases_json(file_name):
             (
                 {
                     "number": latest_release,
-                    "released": False,
-                    "date_released": None,
+                    "releasedOnQA": False,
+                    "releasedOnProd": False,
+                    "dateReleasedOnQA": None,
+                    "dateReleasedOnProd": None,
                     "migrations": [file_name],
                 }
             ),
