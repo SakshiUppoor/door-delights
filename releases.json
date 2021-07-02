@@ -11,7 +11,8 @@
                 "00001_create_menu_items_tables.sql",
                 "00002_create_combo_meal_pair_table.sql",
                 "00003_create_order_tables.sql",
-                "00004_alter_menu_item_and_topping_tables.sql"
+                "00004_alter_menu_item_and_topping_tables.sql",
+                "00005_add_toppings.sql"
             ]
         }
     ]
