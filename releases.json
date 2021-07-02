@@ -13,7 +13,8 @@
                 "00003_create_order_tables.sql",
                 "00004_alter_menu_item_and_topping_tables.sql",
                 "00005_add_toppings.sql",
-                "00006_add_single_menu_items.sql"
+                "00006_add_single_menu_items.sql",
+                "00007_add_item_topping_pairs.sql"
             ]
         }
     ]
