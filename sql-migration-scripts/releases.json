@@ -1,15 +1,8 @@
 {
     "releases": [
         {
-            "number": "0.0.1",
-            "dateReleasedOnProd": "2021-07-04T17:45:09.781624",
-            "migrations": [
-                "00010_hi.sql"
-            ]
-        },
-        {
             "number": "0.0.0",
-            "dateReleasedOnProd": "2021-07-04T17:41:44.245808",
+            "dateReleasedOnProd": null,
             "migrations": [
                 "00000_create_user_and_address_tables.sql",
                 "00001_create_menu_items_tables.sql",
