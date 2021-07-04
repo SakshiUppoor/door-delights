@@ -2,6 +2,7 @@ import json
 import psycopg2
 from datetime import datetime
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from utils import (
     parse_args,
@@ -46,6 +47,32 @@ if release_id != -1:
 else:
     print("No migrations found.")
 
+"""
+Get migrations which are already applied on the machine
+"""
+applied_migrations = []
+rolled_back_migrations = []
+
+local_migrations = Path('local_migrations.json')
+local_migrations.touch(exist_ok=True)
+
+with open("local_migrations.json") as json_file:
+    try:
+        applied_migrations = json.load(json_file).get("migrations")
+    except Exception as e:
+        applied_migrations = []
+
+if not applied_migrations:
+    applied_migrations = []
+
+if rollback:
+    migrations = [element for element in migrations if element in applied_migrations]
+else:
+    migrations = [element for element in migrations if element not in applied_migrations]
+
+if len(migrations) == 0:
+    print("No migrations to apply.")
+
 failed_flag = 0
 for migration in migrations:
 
@@ -61,6 +88,10 @@ for migration in migrations:
             else:
                 print(f"Applying {migration}.........", end="")
             cursor.execute(query)
+            if rollback:
+                rolled_back_migrations.append(migration)
+            else:
+                applied_migrations.append(migration)
             log_success(release_no, migration, rollback)
 
             # TODO Revoke access permissions
@@ -71,30 +102,34 @@ for migration in migrations:
 
             break
     
-    db_server = os.getenv("DATABASE_SERVER").lower()
-    if rollback:
-        if db_server == "qa":
-            releases[release_id]["releasedOnQA"] = False
-        elif db_server == "prod":
-            releases[release_id]["releasedOnProd"] = False
-    else:
+# Update realeases.json
+db_server = os.getenv("DATABASE_SERVER").lower()
+if rollback:
+    if db_server == "prod":
+        releases[release_id]["dateReleasedOnProd"] = None
+else:
+    if db_server == "prod":
         now = datetime.now()
-        if db_server == "qa":
-            releases[release_id]["releasedOnQA"] = True
-            releases[release_id]["dateReleasedOnQA"] = now.isoformat()
-        elif db_server == "prod":
-            releases[release_id]["releasedOnProd"] = True
-            releases[release_id]["dateReleasedOnProd"] = now.isoformat()
-    data = {"releases": releases}
+        releases[release_id]["dateReleasedOnProd"] = now.isoformat()
+data = {"releases": releases}
 
-    with open("releases.json", "w") as file:
-        json.dump(data, file, indent=4)
+with open("releases.json", "w") as file:
+    json.dump(data, file, indent=4)
+
+# Update Local Migration JSON
+with open("local_migrations.json", "w") as file:
+    if rollback:
+        migrations = [element for element in applied_migrations if element not in rolled_back_migrations]
+    else:
+        migrations = applied_migrations
+    data = {"migrations":migrations}
+    json.dump(data, file, indent=4)
 
 if connection:
     cursor.close()
     connection.close()
 
-if migrations and not failed_flag:
+if len(migrations) != 0 and not failed_flag:
     if rollback:
         print("Rolled back successfully. ")
     else:
