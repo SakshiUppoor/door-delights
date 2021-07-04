@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <link rel="stylesheet" href="/css/greetings.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <!-- <p th:text="'Helloooooooooooo, ' + ${name} + '!'" /> -->
+
+    <tr th:each="item: ${items}">
+        <td th:text="${item.menuItemName}" />
+        <td th:text="${item.menuItemDescription}" />
+    </tr>
+</body>
+</html>
