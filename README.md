@@ -56,6 +56,17 @@ Scripts:
 Create a JSON file for the change containing the SQL queries, corresponding SQL query to rollback the aforementioned queries, any comments or reason for the change
 Add this migration to the next scheduled release or create a new release (releases.json)
 
+* Sample migration file:
+    ```
+    {
+        "Name": "Add toppings",
+        "Reason for the migration": "Updating menu",
+        "SQL script": "INSERT INTO toppings (name) VALUES ('Mushroom');",
+        "Rollback script": "DELETE FROM topping\nWHERE name='Mushroom';\n\n",
+        "Comments": "-"
+    }
+    ```
+
 2. `migrate_to_db.py`
 Running this script migrates all the migrations linked in the given release no.
 In case the server is production or QA, the releases.json is updated accordingly.
