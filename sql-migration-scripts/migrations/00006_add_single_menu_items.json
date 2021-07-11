@@ -1,0 +1,7 @@
+{
+    "Name": "add single menu items",
+    "Reason for the migration": "",
+    "SQL script": "INSERT INTO menu_item (name, description, photo, meal_type)\nVALUES ('Margherita Pizza', 'Flavorful Margherita Pizza only includes a few simple and tasty ingredients, like perfectly melty mozzarella cheese and fresh basil.', 'https://cdn.loveandlemons.com/wp-content/uploads/2019/09/margherita-pizza-500x500.jpg', 'single'),\n('Mushroom Pizza', 'This mushroom pizza is a white pizza that\ufffds covered with mozzarella cheese, goat cheese, and fresh herbs. It\ufffds perfection!', 'https://www.acouplecooks.com/wp-content/uploads/2019/06/Mushroom-Pizza-with-Herbs-011.jpg', 'single');\n\n",
+    "Rollback script": "DELETE FROM menu_item\nWHERE name='Margherita Pizza' \nOR name='Mushroom Pizza';\n\n",
+    "Comments": ""
+}
