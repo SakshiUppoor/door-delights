@@ -2,6 +2,6 @@
     "Name": "Add toppings",
     "Reason for the migration": "Inserting data",
     "SQL script": "BEGIN TRANSACTION;\n    INSERT INTO topping (name, description, photo)\n    VALUES\n        ('Mushroom', 'Adds a savory earthiness to the pizza', 'https://lotsa.com/wp-content/uploads/2017/10/mushrooms.png'),\n        ('Pepperoni', 'An American extrapolation of Calabrese salami tradition', 'https://5.imimg.com/data5/SELLER/Default/2021/5/YX/KV/VS/1432671/spanish-pepperoni-sliced-repacked--500x500.png'),\n        ('Marinara Sauce', 'A traditional Italian tomato sauce that combines crushed tomatoes, garlic and a variety of other ingredients', 'https://simpleveganblog.com/wp-content/uploads/2018/07/Homemade-marinara-sauce.jpg'),\n        ('Basil', 'An herb from the mint family', 'https://image.freepik.com/free-photo/close-up-fresh-green-basil-herb-leaves-isolated-white-background-sweet-genovese-bas_33736-569.jpg'),\n        ('Mozarella Cheese', 'A traditionally southern Italian cheese', 'https://bestaabtrading.com/wp-content/uploads/2020/02/mozarella.jpg');\nCOMMIT;\n\n",
-    "Rollback script": "DELETE FROM menu_item\nWHERE name='Margherita Pizza' \nOR name='Mushroom Pizza';\n\n",
+    "Rollback script": "DELETE FROM topping\nWHERE name IN ('Mushroom', 'Pepperoni', 'Marinara Sauce', 'Basil', 'Mozarella Cheese');\n\n",
     "Comments": ""
 }
