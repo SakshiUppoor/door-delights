@@ -1,0 +1,7 @@
+{
+    "Name": "Create order tables",
+    "Reason for the migration": "Add tables",
+    "SQL script": "BEGIN TRANSACTION;\n    CREATE TABLE IF NOT EXISTS delivery (\n        id SERIAL,\n        delivery_person_id INT NOT NULL,\n        address_id INT NOT NULL,\n        total_amount REAL NOT NULL,\n        delivery_instructions VARCHAR(255),\n    \tis_ordered BOOLEAN,\n    \tis_delivered BOOLEAN,\n\t\tentry_time TIMESTAMP DEFAULT NOW(),\n        FOREIGN KEY (delivery_person_id) REFERENCES user_account(id)\n        ON DELETE CASCADE,\n        FOREIGN KEY (address_id) REFERENCES address(id)\n        ON DELETE CASCADE,\n        PRIMARY KEY (id)\n    );\n    CREATE TABLE IF NOT EXISTS order_item (\n        id SERIAL,\n        delivery_id INT NOT NULL,\n        menu_item_id INT NOT NULL,\n\t\tquantity INT NOT NULL,\n        customer_id INT NOT NULL,\n        FOREIGN KEY (delivery_id) REFERENCES delivery(id)\n        ON DELETE CASCADE,\n        FOREIGN KEY (menu_item_id) REFERENCES menu_item(id)\n        ON DELETE CASCADE,\n        FOREIGN KEY (customer_id) REFERENCES user_account(id)\n        ON DELETE CASCADE,\n        PRIMARY KEY (id)\n    );\nCOMMIT;\n\n",
+    "Rollback script": "BEGIN TRANSACTION;\n\tDROP TABLE order_item;\n\tDROP TABLE delivery;\nCOMMIT;\n\n",
+    "Comments": ""
+}

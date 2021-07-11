@@ -20,6 +20,7 @@ def take_input():
     print("Details for the migration file: ")
     sql_script = ""
     migration_name = input("Name: ")
+    migration_reason = input("Reason for creating the migration: ")
     line = input("SQL script: ")
     sql_script += line + "\n"
 
@@ -49,31 +50,35 @@ def take_input():
     # permissions_for_rollback.append("insert") if input("Insert? [-/y] ")!="" else None
     # permissions_for_rollback.append("drop") if input("Drop? [-/y] ")!="" else None
 
-    return migration_name, sql_script, rollback_script
+    migration_comments = input("Comments: ")
+    return migration_name, migration_reason, migration_comments, sql_script, rollback_script
 
 
 def get_migration_number():
     MIGRATION_NO_DIGITS = 5
-    path = "sql_queries/migrations"
-    rollback_path = "sql_queries/rollback"
+    path = "migrations"
     try:
         n = len(listdir(path))
         return "0" * (MIGRATION_NO_DIGITS - len(str(n))) + str(n)
     except OSError:
         Path(path).mkdir(parents=True, exist_ok=True)
-        Path(rollback_path).mkdir(parents=True, exist_ok=True)
         return "0" * MIGRATION_NO_DIGITS
 
 
-def create_migration_files(migration_name, sql_script, rollback_script):
+def create_migration_files(migration_name, migration_reason, migration_comments, sql_script, rollback_script):
     migration_no = get_migration_number()
-    filename = migration_no + "_" + migration_name.lower().replace(" ", "_") + ".sql"
+    filename = migration_no + "_" + migration_name.lower().replace(" ", "_") + ".json"
 
-    with open(f"sql_queries/migrations/{filename}", "w") as file:
-        file.write(sql_script)
-
-    with open(f"sql_queries/rollback/{filename}", "w") as file:
-        file.write(rollback_script)
+    content = {
+        "Name": migration_name,
+        "Reason for the migration": migration_reason,
+        "SQL script": sql_script,
+        "Rollback script": rollback_script,
+        "Comments": migration_comments
+    }
+    
+    with open(f"migrations/{filename}", "w") as file:
+        json.dump(content, file, indent=4)
 
     return filename
 
@@ -115,9 +120,9 @@ def include_in_releases_json(file_name):
         json.dump(data, file, indent=4)
 
 
-migration_name, sql_script, rollback_script = take_input()
+migration_name, migration_reason, migration_comments, sql_script, rollback_script = take_input()
 
-file_name = create_migration_files(migration_name, sql_script, rollback_script)
+file_name = create_migration_files(migration_name, migration_reason, migration_comments, sql_script, rollback_script)
 
 include_in_releases_json(file_name)
 

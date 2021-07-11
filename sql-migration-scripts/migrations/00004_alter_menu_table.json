@@ -1,0 +1,7 @@
+{
+    "Name": "Alter menu table",
+    "Reason for the migration": "Add constraints",
+    "SQL script": "BEGIN TRANSACTION;\n    ALTER TABLE menu_item\n    ADD CONSTRAINT unique_menu_item_name UNIQUE (name);\n    ALTER TABLE topping\n    ADD CONSTRAINT unique_topping_name UNIQUE (name);\nCOMMIT;\n\n",
+    "Rollback script": "BEGIN TRANSACTION;\n    ALTER TABLE menu_item\n    DROP CONSTRAINT unique_menu_item_name;\n    ALTER TABLE topping\n    DROP CONSTRAINT unique_topping_name;\nCOMMIT;\n\n",
+    "Comments": ""
+}

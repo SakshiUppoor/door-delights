@@ -1,0 +1,7 @@
+{
+    "Name": "Create user and address tables",
+    "Reason for the migration": "Add tables",
+    "SQL script": "BEGIN TRANSACTION;\n    DO $$\n    BEGIN\n        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'types') THEN\n            CREATE TYPE types AS ENUM('customer', 'manager', 'delivery_person');\n        END IF;\n    END$$;\n    CREATE TABLE IF NOT EXISTS user_account (\n        id SERIAL,\n        email VARCHAR(40) NOT NULL,\n        hashed_password VARCHAR(255) NOT NULL,\n        first_name VARCHAR(255) NOT NULL,\n        last_name VARCHAR(255) NOT NULL,\n        user_type types NOT NULL,\n        PRIMARY KEY (id),\n        UNIQUE (email)\n    );\n    CREATE TABLE IF NOT EXISTS address (\n        id SERIAL,\n        line1 VARCHAR(255) NOT NULL,\n        line2 VARCHAR(255) NOT NULL,\n        pincode VARCHAR(10) NOT NULL,\n        country VARCHAR(255),\n        state VARCHAR(255),\n        PRIMARY KEY (id)\n    );\n    CREATE TABLE IF NOT EXISTS saved_address (\n        id SERIAL,\n        title VARCHAR(15),\n        user_id INT NOT NULL,\n        address_id INT NOT NULL,\n        FOREIGN KEY (user_id) REFERENCES user_account(id)\n        ON DELETE CASCADE,\n        FOREIGN KEY (address_id) REFERENCES address(id)\n        ON DELETE CASCADE,\n        PRIMARY KEY (id)\n    );\nCOMMIT;\n\n",
+    "Rollback script": "BEGIN TRANSACTION;\n    DROP TABLE saved_address;\n    DROP TABLE address;\n    DROP TABLE user_account;\n    DROP TYPE types;\nCOMMIT;\n\n",
+    "Comments": ""
+}

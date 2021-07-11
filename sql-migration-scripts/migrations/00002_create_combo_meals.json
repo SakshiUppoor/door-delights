@@ -1,0 +1,7 @@
+{
+    "Name": "Create combo meals",
+    "Reason for the migration": "Add table",
+    "SQL script": "BEGIN TRANSACTION;\n    CREATE TABLE IF NOT EXISTS combo_meal_pair (\n        combo_meal_id INT NOT NULL,\n        single_item_id INT NOT NULL,\n        FOREIGN KEY (combo_meal_id) REFERENCES menu_item(id)\n        ON DELETE CASCADE,\n        FOREIGN KEY (single_item_id) REFERENCES menu_item(id)\n        ON DELETE CASCADE,\n        PRIMARY KEY (combo_meal_id, single_item_id)\n    );\nCOMMIT;\n\n",
+    "Rollback script": "BEGIN TRANSACTION;\n\tDROP TABLE combo_meal_pair;\nCOMMIT;\n\n",
+    "Comments": ""
+}
