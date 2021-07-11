@@ -61,8 +61,8 @@ Add this migration to the next scheduled release or create a new release (releas
     {
         "Name": "Add toppings",
         "Reason for the migration": "Updating menu",
-        "SQL script": "INSERT INTO topping (name) VALUES ('Mushroom');",
-        "Rollback script": "DELETE FROM topping\nWHERE name='Mushroom';\n\n",
+        "SQL script": "INSERT INTO topping (name) VALUES ('Mushroom'), ('Basil'), ('Cheese');",
+        "Rollback script": "DELETE FROM topping\nWHERE name IN ('Mushroom', 'Basil', 'Cheese');\n\n",
         "Comments": "-"
     }
     ```
